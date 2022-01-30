@@ -1,0 +1,179 @@
+
+
+# Step 1: Install packages for tidyverse ----------------------------------
+
+
+# List installed packages
+source('../project_fxns.R')
+list_all_pkgs()
+
+extended_tidyverse <- c('tidyverse', 'tidymodels')
+
+install.packages(extended_tidyverse, dependencies = T)
+
+list_all_pkgs()
+
+
+# Step 2: Validate tidyverse install --------------------------------------
+
+#Following vignette: https://dplyr.tidyverse.org/
+library(dplyr)
+
+# Filter rows with criteria
+starwars %>% 
+    filter(species == "Droid")
+
+# Select columns with criteria
+starwars %>% 
+    select(name, ends_with('color'))
+
+# create new columns
+starwars %>% 
+    mutate(name, bmi = mass / ((height / 100) ** 2)) %>% 
+    select(name:mass, bmi)
+
+# sort records
+starwars %>% 
+    arrange(desc(mass))
+
+# aggregate by group then filter aggregated results
+starwars %>% 
+    group_by(species) %>% 
+    summarize(
+        n = n(),
+        mass = mean(mass, na.rm = T)
+    ) %>% 
+    filter(
+        n > 1,
+        mass > 50
+    )
+
+# Step 3: Validate tidymodels install -------------------------------------
+
+# Following vignette: https://www.tidymodels.org/start/models/
+# 
+# Following vignette: https://rviews.rstudio.com/2019/06/19/a-gentle-intro-to-tidymodels/
+library(tidymodels)
+
+# Create train/test split
+iris_split <- initial_split(iris, prop = 0.6)
+iris_split
+
+# Get sense of training data
+iris_split %>% 
+    training() %>% 
+    glimpse()
+
+# Prepare recipe on training data
+# Specify model formula with `recipe()`
+# Remove vars with large correlations to each other with `step_corr`
+# Normalize data to have mean == 0 with `step_center`
+# Normalize data to have stdev == 1 with `step_scale`
+# Finalize the preparation with `prep()`
+iris_recipe <- training(iris_split) %>% 
+    recipe(Species ~ .) %>% 
+    step_corr(all_predictors()) %>% 
+    step_center(all_predictors(), -all_outcomes()) %>% 
+    step_scale(all_predictors(), -all_outcomes()) %>% 
+    prep()
+
+iris_recipe
+
+# Transform testing dataset with same recipe
+iris_testing <- iris_recipe %>% 
+    bake(testing(iris_split))
+
+# See that the operations printed when making iris_recipe are
+# reflected in iris_testing --- Petal.Length removed, and other data normalized
+glimpse(iris_testing)
+
+# Extract data from the prepared training data preparation
+iris_training <- juice(iris_recipe)
+
+# See that the same operations have been carried out
+glimpse(iris_training)
+
+# Load packages used in vignette into this renvs
+project_root <- "."
+renv::init(project = project_root, bare = T)
+renv::activate(project = project_root)
+
+pkgs_from_TM_vignette <- c('ranger', 'randomForest')
+
+list_all_pkgs(pkgs_from_TM_vignette)
+
+install.packages(pkgs_from_TM_vignette, dependencies = T)
+
+list_all_pkgs(pkgs_from_TM_vignette)
+
+# Build random forest model with ranger package
+iris_ranger <- rand_forest(trees = 100, mode = 'classification') %>% 
+    set_engine('ranger') %>% 
+    fit(Species ~ ., data = iris_training)
+
+# Build random forest model with randomForest package
+iris_rf <- rand_forest(trees = 100, mode = 'classification') %>% 
+    set_engine('randomForest') %>% 
+    fit(Species ~ ., data = iris_training)
+
+# Make predictions from models
+predict(iris_ranger, iris_testing)
+
+# Bind the predictions back to the actual data
+iris_ranger %>% 
+    predict(iris_testing) %>% 
+    bind_cols(iris_testing) %>% 
+    glimpse()
+
+# Use metrics to measure performance
+iris_ranger %>% 
+    predict(iris_testing) %>% 
+    bind_cols(iris_testing) %>% 
+    metrics(truth = Species, estimate = .pred_class)
+
+# See metrics from alternative package / engine building a rf model
+iris_rf %>% 
+    predict(iris_testing) %>% 
+    bind_cols(iris_testing) %>% 
+    metrics(truth = Species, estimate = .pred_class)
+
+# Since this is a classification algorithm, may be interested in getting
+# probability of a class instead of just the predicted class.
+# Use `type = 'prob'`
+iris_ranger %>% 
+    predict(iris_testing, type = 'prob') %>% 
+    glimpse()
+
+# Bind to the original data
+iris_probs <- iris_ranger %>% 
+    predict(iris_testing, type = 'prob') %>% 
+    bind_cols(iris_testing)
+
+glimpse(iris_probs)
+
+
+# Look at the gain curves
+iris_probs %>% 
+    gain_curve(Species, .pred_setosa:.pred_virginica) %>% 
+    autoplot()
+
+# Look at ROC curves instead
+iris_probs %>% 
+    roc_curve(Species, .pred_setosa:.pred_virginica) %>% 
+    autoplot()
+
+# Combine the probabilities and predicted classes into a single tibble
+# so that you can get a full set of metrics
+predict(iris_ranger, iris_testing, type = 'prob') %>% 
+    bind_cols(predict(iris_ranger, iris_testing)) %>% 
+    bind_cols(select(iris_testing, Species)) %>% 
+    glimpse()
+
+# Obtain the metrics
+predict(iris_ranger, iris_testing, type = 'prob') %>% 
+    bind_cols(predict(iris_ranger, iris_testing)) %>% 
+    bind_cols(select(iris_testing, Species)) %>% 
+    metrics(Species, .pred_setosa:.pred_virginica, estimate = .pred_class)
+
+# Snapshot the environment
+renv::snapshot(project = project_root, type = 'all')

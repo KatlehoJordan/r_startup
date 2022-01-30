@@ -1,0 +1,18 @@
+# List installed packages
+list_all_pkgs <- function(specific_libs = NULL) {
+    list_pkgs <- function(LibPath) {
+        ip <- as.data.frame(installed.packages()[,c(1:4)])
+        ip <- ip[is.na(ip$Priority) & ip$LibPath == LibPath, 1:4, drop = FALSE]
+        if (is.null(specific_libs)) {
+            ip
+        }
+        else {
+            ip <- ip[ip$Package %in% specific_libs, ]
+            ip
+        }
+    }
+    message('\n\nUser packages:', sep = '\n\n')
+    print(list_pkgs('C:/Program Files/R/R-4.1.2/library'))
+    message('\n\nProject packages:', sep = '\n\n')
+    print(list_pkgs(paste0(getwd(), '/renv/library/R-4.1/x86_64-w64-mingw32')))
+}

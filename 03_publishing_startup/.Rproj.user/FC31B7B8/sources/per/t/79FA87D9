@@ -1,0 +1,26 @@
+{
+    "id": "79FA87D9",
+    "path": "D:/Coding/Projects/r_startup/03_publishing_startup/initialize_publishing.R",
+    "project_path": "initialize_publishing.R",
+    "type": "r_source",
+    "hash": "612188381",
+    "contents": "",
+    "dirty": false,
+    "created": 1643547218645.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "35,0",
+        "scrollLine": "3"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1643547481,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1643547481837,
+    "read_only": false,
+    "read_only_alternatives": []
+}

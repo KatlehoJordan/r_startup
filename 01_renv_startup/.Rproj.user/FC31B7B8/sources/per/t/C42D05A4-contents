@@ -1,0 +1,72 @@
+#  Step 1: Call renv::init() ----------------------------------------------
+
+# List installed packages
+source('../project_fxns.R')
+
+pkgs_this_vignette <- c('')
+
+list_all_pkgs(pkgs_this_vignette)
+
+pkgs_this_vignette <- ('renv')
+
+# Install renv
+install.packages(pkgs_this_vignette, dependencies = T)
+
+# List installed packages
+list_all_pkgs(pkgs_this_vignette)
+
+# Follow recommended vignette found here:
+# https://rstudio.github.io/renv/articles/renv.html
+vignette('renv')
+
+renv::init()
+
+# Step 2: Install and remove packages -------------------------------------
+
+# Install a package
+pkgs_this_vignette <- append(pkgs_this_vignette, 'vip')
+
+install.packages(pkgs_this_vignette, dependencies = F)
+
+# View the installation
+list_all_pkgs(pkgs_this_vignette)
+
+# Install another that will then be dropped
+pkg_to_add_then_drop <- 'xgboost'
+
+pkgs_this_vignette <- append(pkgs_this_vignette, pkg_to_add_then_drop)
+
+install.packages(pkgs_this_vignette, dependencies = F)
+
+# Remove a package
+remove.packages(pkg_to_drop)
+
+pkgs_this_vignette <- pkgs_this_vignette[pkgs_this_vignette != pkg_to_drop]
+
+# View the removal
+list_all_pkgs(pkgs_this_vignette)
+
+# Step 3: Call renv::snapshot() -------------------------------------------
+
+# Must use type = 'all' to explicitly save the libraries in the lockfile
+renv::snapshot(type = 'all')
+
+
+# Step 4: Install and remove more packages --------------------------------
+
+# Install another
+pkgs_this_vignette <- append(pkgs_this_vignette, 'testit')
+
+install.packages(pkgs_this_vignette, dependencies = F)
+
+# View the installation
+list_all_pkgs(pkgs_this_vignette)
+
+
+# Step 5: Revert to earlier snapshot --------------------------------------
+
+# Must use clean = T to remove libraries that have been installed since snapshot
+renv::restore(clean = T)
+
+# View the installation
+list_all_pkgs(pkgs_this_vignette)

@@ -1,0 +1,26 @@
+{
+    "id": "4F33E895",
+    "path": "D:/Coding/Projects/r_startup/02_languageserver_startup/initialize_languageserver.R",
+    "project_path": "initialize_languageserver.R",
+    "type": "r_source",
+    "hash": "2454457666",
+    "contents": "",
+    "dirty": false,
+    "created": 1643392616408.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "14,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1643393557,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1643393557740,
+    "read_only": false,
+    "read_only_alternatives": []
+}

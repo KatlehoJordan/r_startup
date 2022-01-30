@@ -1,0 +1,36 @@
+---
+title: "init_py_in_Rmd"
+date: "1/26/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Combining R and Python
+
+Define a variable in R.
+
+```{r}
+counter <- 1
+```
+
+Access R objects in Python code blocks using the prefix `r.`.
+
+```{python}
+r.counter += 1
+message = 'hello-world'
+```
+
+Resume working with the variable `a` in R.
+
+```{r}
+counter
+```
+
+Access Python objects in R code blocks using the prefix `py$` after calling `library('reticulate')` or directly with `reticulate::py$`.
+
+```{r}
+reticulate::py$message
+```

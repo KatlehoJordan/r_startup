@@ -1,0 +1,26 @@
+{
+    "id": "C42D05A4",
+    "path": "D:/Coding/Projects/r_startup/01_renv_startup/initialize_renv.R",
+    "project_path": "initialize_renv.R",
+    "type": "r_source",
+    "hash": "3183557605",
+    "contents": "",
+    "dirty": false,
+    "created": 1643189263196.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "55,0",
+        "scrollLine": "39"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1643196793,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1643196793973,
+    "read_only": false,
+    "read_only_alternatives": []
+}

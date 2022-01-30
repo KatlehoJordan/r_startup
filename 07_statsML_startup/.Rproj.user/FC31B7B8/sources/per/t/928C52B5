@@ -1,0 +1,26 @@
+{
+    "id": "928C52B5",
+    "path": "D:/Coding/Projects/r_startup/09_statsML_startup/initialize_statsML_pkgs.R",
+    "project_path": "initialize_statsML_pkgs.R",
+    "type": "r_source",
+    "hash": "1552752499",
+    "contents": "",
+    "dirty": false,
+    "created": 1643548934357.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "8,63",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1643551761,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1643551761661,
+    "read_only": false,
+    "read_only_alternatives": []
+}
